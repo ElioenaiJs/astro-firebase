@@ -6,7 +6,7 @@ import { CreateUser } from "./CreateUser";
 
 export default function UserList() {
   const [users, setUsers] = useState<any[]>([]);
-  const [showForm, setShowForm] = useState(false); 
+  const [showForm, setShowForm] = useState(false);
 
   const fetchUsers = async () => {
     const querySnapshot = await getDocs(collection(db, "users"));
@@ -14,9 +14,9 @@ export default function UserList() {
     querySnapshot.forEach((doc) => data.push({ id: doc.id, ...doc.data() }));
     setUsers(data);
   };
-  
+
   useEffect(() => {
-    fetchUsers(); 
+    fetchUsers();
   }, []);
 
   return (
@@ -26,11 +26,11 @@ export default function UserList() {
       </h1>
       <div className="mb-6">
         {showForm ? (
-          <CreateUser 
+          <CreateUser
             onUserAdded={() => {
               fetchUsers();
               setShowForm(false);
-            }} 
+            }}
           />
         ) : (
           <button
@@ -41,26 +41,42 @@ export default function UserList() {
           </button>
         )}
       </div>
-      <ul className="space-y-4">
-        {users.map((user) => (
-          <li
-            key={user.id}
-            className="p-4 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors duration-200 border border-gray-200"
-          >
-            <div className="flex flex-wrap items-center gap-2">
-              <strong className="text-lg font-semibold text-blue-600">
-                {user.name}
-              </strong>
-              <span className="text-gray-600">-</span>
-              <span className="text-gray-700">{user.email}</span>
-              <span className="text-gray-600 hidden md:inline">-</span>
-              <span className="text-gray-700">{user.phone}</span>
-              <span className="text-gray-600 hidden md:inline">-</span>
-              <span className="text-gray-700">{user.address}</span>
-            </div>
-          </li>
-        ))}
-      </ul>
+
+      <div className="relative overflow-x-auto">
+        <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+          <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+            <tr>
+              <th scope="col" className="px-6 py-3">
+                Nombre
+              </th>
+              <th scope="col" className="px-6 py-3">
+                mail
+              </th>
+              <th scope="col" className="px-6 py-3">
+                Telefono
+              </th>
+              <th scope="col" className="px-6 py-3">
+                Direccion
+              </th>
+            </tr>
+          </thead>
+          {users.map((user) => (
+            <tbody>
+              <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 border-gray-200">
+                <th
+                  scope="row"
+                  className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
+                >
+                  {user.name}
+                </th>
+                <td className="px-6 py-4">{user.email}</td>
+                <td className="px-6 py-4">{user.phone}</td>
+                <td className="px-6 py-4">{user.address}</td>
+              </tr>
+            </tbody>
+          ))}
+        </table>
+      </div>
     </div>
   );
 }
