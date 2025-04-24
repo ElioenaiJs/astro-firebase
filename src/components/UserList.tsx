@@ -2,19 +2,21 @@ import React, { useEffect, useState } from "react";
 import { collection, getDocs } from "firebase/firestore";
 import { db } from "../lib/firebase";
 import "../styles/global.css";
+import { CreateUser } from "./CreateUser";
 
 export default function UserList() {
   const [users, setUsers] = useState<any[]>([]);
+  const [showForm, setShowForm] = useState(false); 
 
+  const fetchUsers = async () => {
+    const querySnapshot = await getDocs(collection(db, "users"));
+    const data: any[] = [];
+    querySnapshot.forEach((doc) => data.push({ id: doc.id, ...doc.data() }));
+    setUsers(data);
+  };
+  
   useEffect(() => {
-    async function fetchData() {
-      const querySnapshot = await getDocs(collection(db, "users"));
-      const data: any[] = [];
-      querySnapshot.forEach((doc) => data.push({ id: doc.id, ...doc.data() }));
-      setUsers(data);
-    }
-
-    fetchData();
+    fetchUsers(); 
   }, []);
 
   return (
@@ -22,13 +24,22 @@ export default function UserList() {
       <h1 className="text-3xl font-bold text-gray-800 mb-6 border-b pb-2">
         Usuarios
       </h1>
-      <div className="mb-4">
-        <button
-          className="px-4 py-2 bg-blue-600 text-white font-semibold rounded-lg shadow-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
-          onClick={() => alert("Agregar usuario")}
-        >
-          Agregar Usuario
-        </button>
+      <div className="mb-6">
+        {showForm ? (
+          <CreateUser 
+            onUserAdded={() => {
+              fetchUsers();
+              setShowForm(false);
+            }} 
+          />
+        ) : (
+          <button
+            onClick={() => setShowForm(true)}
+            className="px-4 py-2 bg-blue-600 text-white font-semibold rounded-lg shadow-md hover:bg-blue-700"
+          >
+            Agregar Usuario
+          </button>
+        )}
       </div>
       <ul className="space-y-4">
         {users.map((user) => (
