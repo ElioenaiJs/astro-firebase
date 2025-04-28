@@ -3,13 +3,14 @@ import { collection, getDocs, query, where } from "firebase/firestore";
 import { db } from "../lib/firebase";
 import "../styles/global.css";
 import { CreateUser } from "./CreateUser";
+import { EditUser } from "./EditUser";
 
 export default function UserList() {
   const [users, setUsers] = useState<any[]>([]); // Todos los usuarios
   const [filteredUsers, setFilteredUsers] = useState<any[]>([]); // Usuarios filtrados
   const [showForm, setShowForm] = useState(false); // Mostrar/ocultar formulario
   const [searchTerm, setSearchTerm] = useState(""); // Texto de búsqueda
-
+  const [editingUserId, setEditingUserId] = useState<string | null>(null);
   /**
    * Obtiene todos los usuarios de la colección 'users' en Firestore
    * y actualiza tanto el estado de usuarios como el de usuarios filtrados.
@@ -232,7 +233,7 @@ export default function UserList() {
                   <td className="px-6 py-4">{user.address}</td>
                   <td className="px-6 py-4 text-center w-[80px]">
                     <button
-                      onClick={() => console.log(`Edit user: ${user.id}`)}
+                      onClick={() => setEditingUserId(user.id)}
                       className="font-medium text-blue-600 dark:text-blue-500 hover:underline"
                       title="Editar"
                     >
@@ -264,6 +265,16 @@ export default function UserList() {
           </tbody>
         </table>
       </div>
+      {editingUserId && (
+        <EditUser
+          userId={editingUserId}
+          onUserUpdated={() => {
+            fetchUsers();
+            setEditingUserId(null);
+          }}
+          onClose={() => setEditingUserId(null)}
+        />
+      )}
     </div>
   );
 }
