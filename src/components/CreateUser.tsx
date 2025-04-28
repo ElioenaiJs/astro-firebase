@@ -48,62 +48,62 @@ export function CreateUser({ onUserAdded }: { onUserAdded?: () => void }) {
   };
 
   return (
-    <div className="p-6 bg-white rounded-lg shadow-md mb-8">
-      <h2 className="text-2xl font-bold text-gray-800 mb-4">Crear Usuario</h2>
-      
+    <div className="p-6 bg-transparent rounded-lg shadow-md mb-8">
+      <h2 className="text-2xl font-bold text-white mb-4">Crear Usuario</h2>
+  
       {error && (
         <div className="mb-4 p-3 bg-red-100 text-red-700 rounded-md">
           {error}
         </div>
       )}
-
+  
       <form onSubmit={handleSubmit} className="space-y-4">
         <div>
-          <label className="block text-gray-700 mb-1">Nombre*</label>
+          <label className="block text-white mb-1">Nombre*</label>
           <input
             type="text"
             name="name"
             value={formData.name}
             onChange={handleChange}
-            className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+            className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-transparent text-white"
             required
           />
         </div>
-
+  
         <div>
-          <label className="block text-gray-700 mb-1">Email*</label>
+          <label className="block text-white mb-1">Email*</label>
           <input
             type="email"
             name="email"
             value={formData.email}
             onChange={handleChange}
-            className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+            className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-transparent text-white"
             required
           />
         </div>
-
+  
         <div>
-          <label className="block text-gray-700 mb-1">Teléfono</label>
+          <label className="block text-white mb-1">Teléfono</label>
           <input
             type="tel"
             name="phone"
             value={formData.phone}
             onChange={handleChange}
-            className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+            className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-transparent text-white"
           />
         </div>
-
+  
         <div>
-          <label className="block text-gray-700 mb-1">Dirección</label>
+          <label className="block text-white mb-1">Dirección</label>
           <input
             type="text"
             name="address"
             value={formData.address}
             onChange={handleChange}
-            className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+            className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-transparent text-white"
           />
         </div>
-
+  
         <button
           type="submit"
           disabled={isSubmitting}
@@ -118,4 +118,5 @@ export function CreateUser({ onUserAdded }: { onUserAdded?: () => void }) {
       </form>
     </div>
   );
+  
 }
