@@ -10,24 +10,39 @@ interface UserForm {
 }
 
 export function CreateUser({ onUserAdded }: { onUserAdded?: () => void }) {
+  // Estado del formulario con datos del usuario
   const [formData, setFormData] = useState<UserForm>({
     name: "",
     email: "",
     phone: "",
     address: "",
   });
+
+  // Estado que indica si el formulario está enviándose
   const [isSubmitting, setIsSubmitting] = useState(false);
+
+  // Estado para mensajes de error
   const [error, setError] = useState("");
 
+  /**
+   * Maneja cambios en los inputs del formulario
+   * @param {React.ChangeEvent<HTMLInputElement>} e - Evento de cambio
+   */
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
+  /**
+   * Maneja el envío del formulario para crear un nuevo usuario
+   * @param {React.FormEvent} e - Evento de envío del formulario
+   * @returns {Promise<void>}
+   */
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError("");
 
+    // Validación básica
     if (!formData.name || !formData.email) {
       setError("Nombre y email son requeridos");
       return;
@@ -36,8 +51,11 @@ export function CreateUser({ onUserAdded }: { onUserAdded?: () => void }) {
     setIsSubmitting(true);
 
     try {
+      // Guardar en Firestore
       await addDoc(collection(db, "users"), formData);
+      // Resetear formulario
       setFormData({ name: "", email: "", phone: "", address: "" });
+      // Callback después de éxito
       if (onUserAdded) onUserAdded();
     } catch (err) {
       setError("Error al crear el usuario");
@@ -111,8 +129,8 @@ export function CreateUser({ onUserAdded }: { onUserAdded?: () => void }) {
             disabled={isSubmitting}
             className={`px-6 py-2 rounded-lg font-semibold text-white ${
               isSubmitting
-          ? "bg-gray-400 cursor-not-allowed"
-          : "bg-blue-600 hover:bg-blue-700"
+                ? "bg-gray-400 cursor-not-allowed"
+                : "bg-blue-600 hover:bg-blue-700"
             }`}
           >
             {isSubmitting ? "Guardando..." : "Guardar Usuario"}
